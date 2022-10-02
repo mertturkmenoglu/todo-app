@@ -19,7 +19,7 @@ function TodoList(): JSX.Element {
       const query: Partial<TodoQueryParams> = {
         page: ctx.paginationIndex,
         order: 'desc',
-        completed: ctx.isOnlyIncomplete ? ctx.isOnlyIncomplete : undefined,
+        completed: ctx.isOnlyIncomplete ? false : undefined,
         pageSize: 5,
         searchTerm: ctx.searchTerm !== '' ? ctx.searchTerm : undefined,
       };
