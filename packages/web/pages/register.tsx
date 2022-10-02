@@ -96,6 +96,7 @@ const Register: NextPage = () => {
 
             <TextField
               label="Password *"
+              type="password"
               className="mt-4"
               autoComplete="new-password"
               placeholder="Password"
@@ -110,6 +111,7 @@ const Register: NextPage = () => {
 
             <TextField
               label="Confirm Password *"
+              type="password"
               className="mt-4"
               autoComplete="new-password"
               placeholder="Confirm Password"

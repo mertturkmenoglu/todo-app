@@ -60,6 +60,7 @@ function LoginForm(): JSX.Element {
 
       <TextField
         label="Password"
+        type="password"
         className="mt-4"
         autoComplete="current-password"
         placeholder="Password"
