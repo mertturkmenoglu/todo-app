@@ -7,6 +7,11 @@ import { TextField } from '../components';
 import Head from 'next/head';
 import { isAuthenticated } from '../utils';
 import { Header } from '../components/Header';
+import { useRef } from 'react';
+import { AuthApi } from '../services';
+import { isApiError } from '../services/common/isApiError';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 export interface RegisterInputs {
   fullName: string;
@@ -16,14 +21,33 @@ export interface RegisterInputs {
 }
 
 const Register: NextPage = () => {
+  const api = useRef(new AuthApi());
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterInputs>();
 
-  const onSubmit: SubmitHandler<RegisterInputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
+    const res = await api.current.register(data);
+
+    if (isApiError(res)) {
+      toast(res.response?.data.message ?? 'Error happened', {
+        type: 'error',
+      });
+      return;
+    }
+
+    toast('Registered successfully', {
+      type: 'success',
+      delay: 2000,
+    });
+
+    setTimeout(async () => {
+      await router.push('/login');
+    }, 2000);
   };
 
   return (
