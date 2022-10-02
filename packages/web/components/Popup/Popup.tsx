@@ -32,6 +32,7 @@ function Popup({ title, children, isOpen, setIsOpen }: PopupProps): JSX.Element 
           <button
             onClick={() => setIsOpen(false)}
             className="mt-2 self-end"
+            data-testid="popup-close-btn"
           >
             <XMarkIcon className="h-5 w-5 text-black" />
           </button>
