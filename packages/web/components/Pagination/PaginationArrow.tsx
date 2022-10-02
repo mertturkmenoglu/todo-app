@@ -23,6 +23,7 @@ export function PaginationArrow({ isFirst, isLast, onClick, type }: PaginationAr
         'cursor-not-allowed border-neutral-500 ': isDisabled,
       })}
       disabled={isDisabled}
+      data-testid={type === 'prev' ? 'prev-btn' : 'next-btn'}
     >
       {type === 'prev' && (
         <ChevronLeftIcon
