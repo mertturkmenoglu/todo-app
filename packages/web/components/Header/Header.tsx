@@ -35,7 +35,7 @@ function Header({ variant = 'default' }: HeaderProps): JSX.Element {
   }
 
   return (
-    <header className={clsx('mt-8 flex w-full items-center justify-between bg-neutral-100 px-16 py-4')}>
+    <header className={clsx('mt-8 flex w-full items-center justify-between bg-neutral-100 px-4 py-4 md:px-16')}>
       <Link href="/">
         <a className="text-3xl font-bold text-black">Squirrel Todo App</a>
       </Link>

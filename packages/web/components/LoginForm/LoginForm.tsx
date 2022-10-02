@@ -10,7 +10,7 @@ function LoginForm(): JSX.Element {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-16 w-1/3"
+      className="mt-16 w-2/3 lg:w-1/3"
     >
       <TextField
         label="Email"
