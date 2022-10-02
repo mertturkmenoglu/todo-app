@@ -1,24 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { HomeContext } from '../../contexts';
-import { debounce } from 'debounce';
+import { useQueryClient } from '@tanstack/react-query';
+
+let timeout: NodeJS.Timeout;
 
 function SearchBar(): JSX.Element {
+  const [value, setValue] = useState('');
   const ctx = useContext(HomeContext);
+  const queryClient = useQueryClient();
 
-  const onSearchTermUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onSearchTermUpdate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    ctx.setSearchTerm(inputValue);
+    setValue(inputValue);
+    clearTimeout(timeout);
 
-    const filter = debounce(() => {
-      if (inputValue === '') {
-        //setData([]);
-        return;
-      }
-
-      //setData((prev) => prev.filter((item) => item.text.toLowerCase().includes(inputValue.toLowerCase())));
-    }, 500);
-
-    filter();
+    timeout = setTimeout(async () => {
+      ctx.setSearchTerm(inputValue);
+      await queryClient.invalidateQueries(['todos']);
+    }, 1000);
   };
 
   return (
@@ -27,7 +26,7 @@ function SearchBar(): JSX.Element {
         type="search"
         className="w-full border border-black py-2 px-4 focus:outline-none focus:ring focus:ring-amber-300 focus:ring-offset-2"
         placeholder="Search"
-        value={ctx.searchTerm}
+        value={value}
         onChange={onSearchTermUpdate}
       />
     </div>
