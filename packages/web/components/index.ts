@@ -1,4 +1,5 @@
 export * from './Header';
+export * from './HomeTitle';
 export * from './LoginForm';
 export * from './Pagination';
 export * from './Popup';
