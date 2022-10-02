@@ -1,14 +1,10 @@
 # Todo App
 
----
-
 ## Description
 
 * Todo App
   for [Carbmee Full Stack Coding Challenge](https://github.com/carbmee/code_challenges/tree/master/full_stack_challenge)
 * Solution focuses on both frontend and backend.
-
----
 
 ## How to run?
 
@@ -80,8 +76,6 @@ yarn dev
 
 * Server should start at port `4000`.
 
----
-
 ## Tech Stack
 
 ### Backend
@@ -116,11 +110,10 @@ yarn dev
 * **TailwindCSS**: Utility-first CSS framework.
 * **TypeScript**: Typesafe language
 
----
-
 # Future Steps
 
 * [ ] Add refresh tokens.
+* [ ] Increase # of tests.
 * [ ] Add unit tests / component tests / e2e tests.
 * [ ] Convert the solution to a monorepo. Possible solutions:
   * Turborepo
