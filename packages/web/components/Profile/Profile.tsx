@@ -1,33 +1,15 @@
 import React from 'react';
 import { TextField } from '../TextField';
 import clsx from 'clsx';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { User } from '../../services';
-
-export interface ProfileInputs {
-  email: string;
-  fullName: string;
-}
+import { useProfile } from './useProfile.hook';
 
 export interface ProfileProps {
   data: User;
 }
 
 function Profile({ data }: ProfileProps): JSX.Element {
-  const {
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = useForm<ProfileInputs>({
-    defaultValues: {
-      email: data.email,
-      fullName: data.fullName,
-    },
-  });
-
-  const onSubmit: SubmitHandler<ProfileInputs> = (inp) => {
-    console.log(inp);
-  };
+  const { register, handleSubmit, onSubmit, errors } = useProfile(data);
 
   return (
     <form
@@ -40,13 +22,8 @@ function Profile({ data }: ProfileProps): JSX.Element {
         className="mt-8"
         inputClassName="cursor-not-allowed"
         disabled={true}
-        {...register('email', {
-          disabled: true,
-        })}
-        error={{
-          type: errors.email?.type,
-          message: errors.email?.message,
-        }}
+        value={data.email}
+        error={{}}
       />
 
       <TextField
