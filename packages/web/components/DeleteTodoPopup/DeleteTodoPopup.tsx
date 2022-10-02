@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Popup } from '../Popup';
-import { HomeContext } from '../../contexts';
+import { TodoContext } from '../../contexts';
 
 function DeleteTodoPopup(): JSX.Element {
-  const ctx = useContext(HomeContext);
+  const ctx = useContext(TodoContext);
 
   return (
     <Popup

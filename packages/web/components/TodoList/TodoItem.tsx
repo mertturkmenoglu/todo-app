@@ -1,8 +1,7 @@
-import React, { useContext, useRef } from 'react';
-import { ArrowTopRightOnSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
+import React, { useRef } from 'react';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 import { Todo, TodoApi } from '../../services';
-import { HomeContext } from '../../contexts';
 import { toast } from 'react-toastify';
 
 export interface TodoItemProps {
@@ -10,7 +9,6 @@ export interface TodoItemProps {
 }
 
 function TodoItem({ todo }: TodoItemProps): JSX.Element {
-  const ctx = useContext(HomeContext);
   const router = useRouter();
   const todoApi = useRef(new TodoApi());
 
@@ -40,15 +38,6 @@ function TodoItem({ todo }: TodoItemProps): JSX.Element {
           }}
         >
           <ArrowTopRightOnSquareIcon className="h-5 w-5 text-black" />
-        </button>
-        <button
-          className="ml-4 rounded-full bg-amber-300 p-2"
-          onClick={() => {
-            ctx.setDeleteTodoId(todo.id);
-            ctx.setIsDeleteTodoOpen(true);
-          }}
-        >
-          <TrashIcon className="h-5 w-5 text-black" />
         </button>
       </div>
     </>

@@ -38,6 +38,7 @@ function TodoList(): JSX.Element {
     },
     {
       keepPreviousData: true,
+      staleTime: 1000,
     }
   );
 
