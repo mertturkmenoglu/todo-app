@@ -3,4 +3,5 @@ export interface TodoQueryParams {
   page: number;
   pageSize: number;
   completed: boolean;
+  searchTerm: string;
 }
