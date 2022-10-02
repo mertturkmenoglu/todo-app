@@ -1,7 +1,8 @@
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { createApi, GenericServiceError } from '../common';
+import { createApi, GenericServiceError, Todo } from '../common';
 import { TodoQueryParams } from '../common/types/TodoQueryParams';
 import { GetTodosDto, UpdateTodoDto } from './dto';
+import { AddTodoDto } from './dto/AddTodo.dto';
 
 export class TodoApi {
   private api: AxiosInstance;
@@ -32,6 +33,22 @@ export class TodoApi {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  public async addTodo(dto: AddTodoDto): Promise<AxiosResponse<Todo> | AxiosError<GenericServiceError>> {
+    try {
+      return await this.api.post('/todo', dto);
+    } catch (e) {
+      return e as AxiosError<GenericServiceError>;
+    }
+  }
+
+  public async getTodoById(id: number): Promise<AxiosResponse<Todo> | null> {
+    try {
+      return await this.api.get(`/todo/${id}`);
+    } catch (e) {
+      return null;
     }
   }
 }
