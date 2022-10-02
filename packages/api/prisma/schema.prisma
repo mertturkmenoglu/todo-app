@@ -1,0 +1,63 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Auth {
+  // Primary Key
+  email String @id
+  
+  // Scalar Values
+  password String @db.VarChar(256)
+  
+  // Relations
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique
+  
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  // Primary Key
+  id Int @id @default(autoincrement())
+  
+  // Scalar Values
+  email         String         @unique() @db.VarChar(255)
+  fullName      String         @db.VarChar(64)
+  
+  // Relations
+  auth        Auth?
+  todos       Todo[]        @relation(name: "UserTodos")
+  
+  // Meta
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  // Indices
+  @@index(email)
+}
+
+model Todo {
+  // Primary Key
+  id Int @id @default(autoincrement())
+  
+  // Scalar Values
+  text String @db.VarChar(255)
+  isCompleted Boolean
+  
+  // Relations
+  user     User        @relation(name: "UserTodos", fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int
+  
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
