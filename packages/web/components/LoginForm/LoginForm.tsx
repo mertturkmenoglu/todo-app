@@ -1,42 +1,11 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { TextField } from '../TextField';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { AuthApi } from '../../services';
-import { isApiError } from '../../services/common/isApiError';
-import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
-
-export interface LoginInputs {
-  email: string;
-  password: string;
-}
+import { useLoginForm } from './useLoginForm.hook';
 
 function LoginForm(): JSX.Element {
-  const api = useRef(new AuthApi());
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginInputs>();
-
-  const router = useRouter();
-
-  const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
-    const result = await api.current.login(data);
-
-    if (isApiError(result)) {
-      toast(result.response?.data.message ?? 'Error happened', {
-        type: 'error',
-        theme: 'light',
-      });
-      return;
-    }
-
-    await router.push('/');
-  };
+  const { register, handleSubmit, onSubmit, errors } = useLoginForm();
 
   return (
     <form
