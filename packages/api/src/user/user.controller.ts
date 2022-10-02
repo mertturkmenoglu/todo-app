@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  CACHE_MANAGER,
+  CacheKey,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiConsumes, ApiProduces, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/guards';
 import { UserService } from '@/user/user.service';
@@ -6,6 +16,7 @@ import { isHttpException } from '@/common';
 import { User as RequestUser } from '@/user/decorators';
 import { User } from '@prisma/client';
 import { UpdateUserDto } from './dto';
+import { Cache } from 'cache-manager';
 
 @ApiTags('user')
 @ApiConsumes('application/json')
@@ -15,10 +26,14 @@ import { UpdateUserDto } from './dto';
   path: 'user',
 })
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   @Get('/me')
   @UseGuards(JwtAuthGuard)
+  @CacheKey('currentUser')
   async getCurrentUser(@RequestUser() user: User): Promise<User> {
     const result = await this.userService.getUserByEmail(user.email);
 
@@ -41,9 +56,13 @@ export class UserController {
     return result;
   }
 
-  @Patch('/:id')
+  @Patch('/')
   @UseGuards(JwtAuthGuard)
-  async updateUser(@Param('id') id: number, @Body() dto: UpdateUserDto): Promise<User> {
-    return await this.userService.updateUser(id, dto);
+  async updateUser(
+    @RequestUser() user: { userId: number },
+    @Body() dto: UpdateUserDto,
+  ): Promise<User> {
+    await this.cacheManager.del('currentUser');
+    return await this.userService.updateUser(user.userId, dto);
   }
 }

@@ -1,8 +1,12 @@
 import {
   Body,
+  CACHE_MANAGER,
+  CacheKey,
+  CacheTTL,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
@@ -16,6 +20,7 @@ import { Todo, User } from '@prisma/client';
 import { TodoService } from './todo.service';
 import { CreateTodoDto, UpdateTodoDto } from '@/todo/dto';
 import { TodoQuery } from '@/common/types/TodoQuery';
+import { Cache } from 'cache-manager';
 
 @ApiTags('todo')
 @ApiConsumes('application/json')
@@ -25,10 +30,15 @@ import { TodoQuery } from '@/common/types/TodoQuery';
   path: 'todo',
 })
 export class TodoController {
-  constructor(private todoService: TodoService) {}
+  constructor(
+    private todoService: TodoService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   @Get('/')
   @UseGuards(JwtAuthGuard)
+  @CacheKey('todos')
+  @CacheTTL(3)
   async getTodos(
     @RequestUser() user: User,
     @Query() query: TodoQuery,
@@ -55,18 +65,21 @@ export class TodoController {
   @Post('/')
   @UseGuards(JwtAuthGuard)
   async createTodo(@RequestUser() user: User, @Body() dto: CreateTodoDto): Promise<Todo> {
+    await this.cacheManager.reset();
     return await this.todoService.createTodo(user, dto);
   }
 
   @Patch('/:id')
   @UseGuards(JwtAuthGuard)
   async updateTodo(@Param('id') id: number, @Body() dto: UpdateTodoDto): Promise<Todo> {
+    await this.cacheManager.reset();
     return await this.todoService.updateTodo(id, dto);
   }
 
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
   async deleteTodo(@Param('id') id: number): Promise<Todo> {
+    await this.cacheManager.reset();
     return await this.todoService.deleteTodo(id);
   }
 }
