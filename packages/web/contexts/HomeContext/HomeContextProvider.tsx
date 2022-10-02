@@ -9,6 +9,9 @@ const HomeContextProvider: React.FC<HomeContextProviderProps> = ({ children }) =
   const [isNewTodoOpen, setIsNewTodoOpen] = useState(defaults.isNewTodoOpen);
   const [isDeleteTodoOpen, setIsDeleteTodoOpen] = useState(defaults.isDeleteTodoOpen);
   const [deleteTodoId, setDeleteTodoId] = useState(defaults.deleteTodoId);
+  const [searchTerm, setSearchTerm] = useState(defaults.searchTerm);
+  const [isOnlyIncomplete, setIsOnlyIncomplete] = useState(defaults.isOnlyIncomplete);
+  const [paginationIndex, setPaginationIndex] = useState(defaults.paginationIndex);
 
   return (
     <HomeContext.Provider
@@ -19,6 +22,12 @@ const HomeContextProvider: React.FC<HomeContextProviderProps> = ({ children }) =
         setIsDeleteTodoOpen,
         deleteTodoId,
         setDeleteTodoId,
+        searchTerm,
+        setSearchTerm,
+        isOnlyIncomplete,
+        setIsOnlyIncomplete,
+        paginationIndex,
+        setPaginationIndex,
       }}
     >
       {children}
