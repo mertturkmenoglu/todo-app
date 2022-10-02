@@ -1,6 +1,6 @@
 import { PaginationQuery } from './PaginationQuery';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { Expose, Transform } from 'class-transformer';
 
 export class TodoQuery extends PaginationQuery {
@@ -14,7 +14,20 @@ export class TodoQuery extends PaginationQuery {
   @Expose({ name: 'completed' })
   private readonly _completed?: boolean | null = null;
 
+  @ApiPropertyOptional({
+    default: null,
+    name: 'searchTerm',
+  })
+  @IsOptional()
+  @IsString()
+  @Expose({ name: 'searchTerm' })
+  private readonly _searchTerm?: string | null = null;
+
   get completed() {
     return this._completed ?? null;
+  }
+
+  get searchTerm() {
+    return this._searchTerm ?? null;
   }
 }

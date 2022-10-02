@@ -9,15 +9,22 @@ export class TodoService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getTodosByEmail(email: string, query: TodoQuery): Promise<[Todo[], number]> {
+    const txt = query.searchTerm ? { contains: query.searchTerm ?? undefined } : undefined;
+
     const whereQuery = {
       user: {
         email,
       },
       isCompleted: query.completed ?? undefined,
+      text: txt,
     };
 
     if (query.completed === null) {
       delete whereQuery.isCompleted;
+    }
+
+    if (query.searchTerm === null) {
+      delete whereQuery.text;
     }
 
     const [data, totalRecords] = await this.prisma.$transaction([
