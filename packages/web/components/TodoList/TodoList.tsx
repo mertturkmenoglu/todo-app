@@ -1,50 +1,13 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { TodoApi } from '../../services';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { isApiError } from '../../services/common/isApiError';
+import React, { useContext } from 'react';
 import TodoItem from './TodoItem';
-import { HomeContext } from '../../contexts';
 import { Pagination } from '../Pagination';
-import { TodoQueryParams } from '../../services/common/types/TodoQueryParams';
+import { HomeContext } from '../../contexts';
+import { useTodoList } from './useTodoList.hook';
 
 function TodoList(): JSX.Element {
   const ctx = useContext(HomeContext);
-  const queryClient = useQueryClient();
 
-  const todoApi = useRef(new TodoApi());
-
-  const { data, isLoading, isError } = useQuery(
-    ['todos', ctx.paginationIndex],
-    async () => {
-      const query: Partial<TodoQueryParams> = {
-        page: ctx.paginationIndex,
-        order: 'desc',
-        completed: ctx.isOnlyIncomplete ? false : undefined,
-        pageSize: 5,
-        searchTerm: ctx.searchTerm !== '' ? ctx.searchTerm : undefined,
-      };
-
-      if (!ctx.isOnlyIncomplete) {
-        delete query.completed;
-      }
-
-      const result = await todoApi.current.getTodos(query);
-
-      if (isApiError(result)) {
-        throw Error(result.message);
-      }
-
-      return result.data;
-    },
-    {
-      keepPreviousData: true,
-      staleTime: 1000,
-    }
-  );
-
-  useEffect(() => {
-    queryClient.invalidateQueries(['todos']);
-  }, [ctx.searchTerm, ctx.isOnlyIncomplete, queryClient]);
+  const { data, isLoading, isError } = useTodoList();
 
   if (isError) {
     return <div>Something went wrong.</div>;
