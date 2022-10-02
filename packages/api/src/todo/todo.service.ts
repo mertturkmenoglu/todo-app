@@ -8,6 +8,14 @@ import { TodoQuery } from '@/common/types/TodoQuery';
 export class TodoService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getTodoById(id: number): Promise<Todo | null> {
+    return await this.prisma.todo.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async getTodosByEmail(email: string, query: TodoQuery): Promise<[Todo[], number]> {
     const txt = query.searchTerm ? { contains: query.searchTerm ?? undefined } : undefined;
 

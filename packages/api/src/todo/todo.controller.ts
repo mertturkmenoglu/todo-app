@@ -46,6 +46,12 @@ export class TodoController {
     };
   }
 
+  @Get('/:id')
+  @UseGuards(JwtAuthGuard)
+  async getTodoById(@Param('id') id: number) {
+    return await this.todoService.getTodoById(id);
+  }
+
   @Post('/')
   @UseGuards(JwtAuthGuard)
   async createTodo(@RequestUser() user: User, @Body() dto: CreateTodoDto): Promise<Todo> {
@@ -60,7 +66,7 @@ export class TodoController {
 
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
-  async deleteTood(@Param('id') id: number): Promise<Todo> {
+  async deleteTodo(@Param('id') id: number): Promise<Todo> {
     return await this.todoService.deleteTodo(id);
   }
 }
