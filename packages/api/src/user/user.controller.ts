@@ -46,7 +46,7 @@ export class UserController {
 
   @Get('/:email')
   @UseGuards(JwtAuthGuard)
-  async getUserByUsername(@Param('email') email: string): Promise<User> {
+  async getUserByEmail(@Param('email') email: string): Promise<User> {
     const result = await this.userService.getUserByEmail(email);
 
     if (isHttpException(result)) {
