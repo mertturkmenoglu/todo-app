@@ -1,7 +1,7 @@
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { createApi, GenericServiceError } from '../common';
 import { TodoQueryParams } from '../common/types/TodoQueryParams';
-import { GetTodosDto } from './dto';
+import { GetTodosDto, UpdateTodoDto } from './dto';
 
 export class TodoApi {
   private api: AxiosInstance;
@@ -23,6 +23,15 @@ export class TodoApi {
       });
     } catch (e) {
       return e as AxiosError<GenericServiceError>;
+    }
+  }
+
+  public async updateTodo(id: number, dto: UpdateTodoDto): Promise<boolean> {
+    try {
+      await this.api.patch(`/todo/${id}`, dto);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }
