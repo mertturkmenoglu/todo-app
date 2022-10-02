@@ -7,9 +7,6 @@ export interface HomeContextState {
   isDeleteTodoOpen: boolean;
   setIsDeleteTodoOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
-  deleteTodoId: number | null;
-  setDeleteTodoId: React.Dispatch<React.SetStateAction<number | null>>;
-
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 
@@ -25,8 +22,6 @@ export const defaultHomeContextState: HomeContextState = {
   setIsNewTodoOpen: () => {},
   isDeleteTodoOpen: false,
   setIsDeleteTodoOpen: () => {},
-  deleteTodoId: null,
-  setDeleteTodoId: () => {},
   searchTerm: '',
   setSearchTerm: () => {},
   isOnlyIncomplete: false,

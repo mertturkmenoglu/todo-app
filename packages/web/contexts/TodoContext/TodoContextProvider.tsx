@@ -7,12 +7,15 @@ export interface TodoContextProviderProps {
 
 const TodoContextProvider: React.FC<TodoContextProviderProps> = ({ children }) => {
   const [isDeleteTodoOpen, setIsDeleteTodoOpen] = useState(defaults.isDeleteTodoOpen);
+  const [deleteTodoId, setDeleteTodoId] = useState(defaults.deleteTodoId);
 
   return (
     <TodoContext.Provider
       value={{
         isDeleteTodoOpen,
         setIsDeleteTodoOpen,
+        deleteTodoId,
+        setDeleteTodoId,
       }}
     >
       {children}
