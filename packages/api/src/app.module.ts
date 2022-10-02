@@ -1,4 +1,4 @@
-import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
@@ -7,6 +7,8 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { AuthModule } from '@/auth/auth.module';
 import { UserModule } from '@/user/user.module';
 import { TodoModule } from '@/todo/todo.module';
+import * as redisStore from 'cache-manager-redis-store';
+import CustomHttpCacheInterceptor from '@/todo/interceptors/custom-http-cache.interceptor';
 
 @Module({
   imports: [
@@ -18,8 +20,9 @@ import { TodoModule } from '@/todo/todo.module';
       limit: process.env.NODE_ENV === 'production' ? 120 : 300,
     }),
     CacheModule.register({
+      store: redisStore,
       isGlobal: true,
-      ttl: 30, // seconds
+      ttl: 5, // seconds
       max: 50, // maximum number of items in cache
     }),
     PrismaModule,
@@ -31,7 +34,7 @@ import { TodoModule } from '@/todo/todo.module';
   providers: [
     {
       provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
+      useClass: CustomHttpCacheInterceptor,
     },
     {
       provide: APP_GUARD,
