@@ -11,4 +11,5 @@ export * from './Profile';
 export * from './RegisterForm';
 export * from './SearchBar';
 export * from './TextField';
+export * from './TodoForm';
 export * from './TodoList';
