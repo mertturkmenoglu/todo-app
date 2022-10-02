@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ArrowTopRightOnSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 import { Todo } from '../../services';
+import { HomeContext } from '../../contexts';
 
 export interface TodoItemProps {
   todo: Todo;
-  setDeleteItemId: React.Dispatch<React.SetStateAction<number | null>>;
-  setIsDeleteTodoOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function TodoItem({ todo, setDeleteItemId, setIsDeleteTodoOpen }: TodoItemProps): JSX.Element {
+function TodoItem({ todo }: TodoItemProps): JSX.Element {
+  const ctx = useContext(HomeContext);
   const router = useRouter();
 
   return (
@@ -37,8 +37,8 @@ function TodoItem({ todo, setDeleteItemId, setIsDeleteTodoOpen }: TodoItemProps)
         <button
           className="ml-4 rounded-full bg-amber-300 p-2"
           onClick={() => {
-            setDeleteItemId(todo.id);
-            setIsDeleteTodoOpen(true);
+            ctx.setDeleteTodoId(todo.id);
+            ctx.setIsDeleteTodoOpen(true);
           }}
         >
           <TrashIcon className="h-5 w-5 text-black" />

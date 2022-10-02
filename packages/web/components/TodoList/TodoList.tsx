@@ -6,11 +6,9 @@ import TodoItem from './TodoItem';
 
 export interface TodoListProps {
   searchTerm: string;
-  setDeleteItemId: React.Dispatch<React.SetStateAction<number | null>>;
-  setIsDeleteTodoOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function TodoList({ searchTerm, setDeleteItemId, setIsDeleteTodoOpen }: TodoListProps): JSX.Element {
+function TodoList({ searchTerm }: TodoListProps): JSX.Element {
   const todoApi = useRef(new TodoApi());
 
   const { data, isLoading, isError } = useQuery(['todos'], async () => {
@@ -43,11 +41,7 @@ function TodoList({ searchTerm, setDeleteItemId, setIsDeleteTodoOpen }: TodoList
             key={todo.id}
             className="flex w-full items-center justify-between px-4 py-2 hover:bg-amber-50"
           >
-            <TodoItem
-              todo={todo}
-              setDeleteItemId={setDeleteItemId}
-              setIsDeleteTodoOpen={setIsDeleteTodoOpen}
-            />
+            <TodoItem todo={todo} />
           </li>
         ))}
       </ul>
