@@ -1,6 +1,6 @@
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { createApi, GenericServiceError } from '../common';
-import { LoginDto, LoginResponseDto } from './dto';
+import { LoginDto, LoginResponseDto, RegisterDto, RegisterResponseDto } from './dto';
 
 export class AuthApi {
   private api: AxiosInstance;
@@ -12,6 +12,16 @@ export class AuthApi {
   public async login(dto: LoginDto): Promise<AxiosResponse<LoginResponseDto> | AxiosError<GenericServiceError>> {
     try {
       return await this.api.post<LoginResponseDto>('/auth/login', dto);
+    } catch (e) {
+      return e as AxiosError<GenericServiceError>;
+    }
+  }
+
+  public async register(
+    dto: RegisterDto
+  ): Promise<AxiosResponse<RegisterResponseDto> | AxiosError<GenericServiceError>> {
+    try {
+      return await this.api.post<RegisterResponseDto>('/auth/register', dto);
     } catch (e) {
       return e as AxiosError<GenericServiceError>;
     }
