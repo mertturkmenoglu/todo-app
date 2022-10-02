@@ -19,6 +19,7 @@ export function useNewTodo() {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm<NewTodoInputs>();
 
   const newTodoMutation = useMutation(
@@ -42,6 +43,7 @@ export function useNewTodo() {
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(['todos']);
+        setValue('text', '');
         ctx.setIsNewTodoOpen(false);
       },
     }
