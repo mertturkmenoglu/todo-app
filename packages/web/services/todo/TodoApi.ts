@@ -51,4 +51,14 @@ export class TodoApi {
       return null;
     }
   }
+
+  public async deleteTodoById(id: number): Promise<boolean> {
+    try {
+      await this.api.delete(`/todo/${id}`);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
 }

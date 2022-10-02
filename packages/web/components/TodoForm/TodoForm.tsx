@@ -87,7 +87,11 @@ function TodoForm({ data }: TodoFormProps): JSX.Element {
         <button className={clsx('w-full rounded bg-amber-300 py-2')}>Update</button>
         <button
           className={clsx('w-full rounded bg-rose-500 py-2 text-neutral-50')}
-          onClick={() => ctx.setIsDeleteTodoOpen(true)}
+          onClick={(e) => {
+            e.preventDefault();
+            ctx.setDeleteTodoId(data.id);
+            ctx.setIsDeleteTodoOpen(true);
+          }}
         >
           Delete
         </button>
