@@ -49,6 +49,7 @@ export class TodoController {
       currentPage: number;
     };
   }> {
+    await this.cacheManager.reset();
     const [data, totalRecords] = await this.todoService.getTodosByEmail(user.email, query);
     return {
       data,
