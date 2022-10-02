@@ -6,7 +6,7 @@ export function getPaginationNumbers(currentPage: number, totalPages: number): n
   }
 
   if (totalPages <= 5) {
-    return fill(new Array(5), 1);
+    return fill(new Array(totalPages), 1);
   }
 
   if (currentPage > totalPages - 3) {
