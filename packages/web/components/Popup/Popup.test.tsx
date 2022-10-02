@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import Popup, { PopupProps } from './Popup';
 import 'intersection-observer';
+import { axe } from '../utils';
 
 describe('Popup Unit Tests', () => {
   let props: PopupProps;
@@ -55,5 +56,17 @@ describe('Popup Unit Tests', () => {
     const closeButton = component.getByTestId('popup-close-btn');
     fireEvent.click(closeButton);
     expect(props.setIsOpen).toBeCalled();
+  });
+
+  it('Should pass a11y tests', async () => {
+    await act(async () => {
+      const component = render(
+        <Popup {...props}>
+          <div>Children</div>
+        </Popup>
+      );
+      const results = await axe.run(component.baseElement);
+      expect(results.violations).toHaveLength(0);
+    });
   });
 });
