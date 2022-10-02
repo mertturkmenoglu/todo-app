@@ -38,7 +38,7 @@ export class TodoController {
   @Get('/')
   @UseGuards(JwtAuthGuard)
   @CacheKey('todos')
-  @CacheTTL(3)
+  @CacheTTL(0)
   async getTodos(
     @RequestUser() user: User,
     @Query() query: TodoQuery,
