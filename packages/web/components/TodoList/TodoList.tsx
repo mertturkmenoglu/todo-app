@@ -1,25 +1,49 @@
-import React, { useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { TodoApi } from '../../services';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { isApiError } from '../../services/common/isApiError';
 import TodoItem from './TodoItem';
+import { HomeContext } from '../../contexts';
+import { Pagination } from '../Pagination';
+import { TodoQueryParams } from '../../services/common/types/TodoQueryParams';
 
-export interface TodoListProps {
-  searchTerm: string;
-}
+function TodoList(): JSX.Element {
+  const ctx = useContext(HomeContext);
+  const queryClient = useQueryClient();
 
-function TodoList({ searchTerm }: TodoListProps): JSX.Element {
   const todoApi = useRef(new TodoApi());
 
-  const { data, isLoading, isError } = useQuery(['todos'], async () => {
-    const result = await todoApi.current.getTodos();
+  const { data, isLoading, isError } = useQuery(
+    ['todos', ctx.paginationIndex],
+    async () => {
+      const query: Partial<TodoQueryParams> = {
+        page: ctx.paginationIndex,
+        order: 'desc',
+        completed: ctx.isOnlyIncomplete ? ctx.isOnlyIncomplete : undefined,
+        pageSize: 5,
+        searchTerm: ctx.searchTerm !== '' ? ctx.searchTerm : undefined,
+      };
 
-    if (isApiError(result)) {
-      throw Error(result.message);
+      if (!ctx.isOnlyIncomplete) {
+        delete query.completed;
+      }
+
+      const result = await todoApi.current.getTodos(query);
+
+      if (isApiError(result)) {
+        throw Error(result.message);
+      }
+
+      return result.data;
+    },
+    {
+      keepPreviousData: true,
     }
+  );
 
-    return result.data;
-  });
+  useEffect(() => {
+    queryClient.invalidateQueries(['todos']);
+  }, [ctx.searchTerm, ctx.isOnlyIncomplete, queryClient]);
 
   if (isError) {
     return <div>Something went wrong.</div>;
@@ -31,6 +55,14 @@ function TodoList({ searchTerm }: TodoListProps): JSX.Element {
 
   if (!data) {
     return <div>Something went wrong.</div>;
+  }
+
+  if (data.data.length === 0 && ctx.searchTerm !== '') {
+    return <div className="text-center">No search results</div>;
+  }
+
+  if (data.data.length === 0 && ctx.searchTerm === '') {
+    return <div className="text-center">No todos. Try adding a new one.</div>;
   }
 
   return (
@@ -46,10 +78,16 @@ function TodoList({ searchTerm }: TodoListProps): JSX.Element {
         ))}
       </ul>
 
-      {data.data.length === 0 && searchTerm !== '' && <div className="text-center">No search results</div>}
-
-      {data.data.length === 0 && searchTerm === '' && (
-        <div className="text-center">No todos. Try adding a new one.</div>
+      {data.data.length !== 0 && (
+        <div className="mt-8 flex w-full justify-center">
+          <Pagination
+            currentPage={ctx.paginationIndex}
+            totalPages={data.pagination.totalPages}
+            onItemClick={(index) => ctx.setPaginationIndex(index)}
+            onPrevClick={() => ctx.setPaginationIndex((prev) => prev - 1)}
+            onNextClick={() => ctx.setPaginationIndex((prev) => prev + 1)}
+          />
+        </div>
       )}
     </>
   );

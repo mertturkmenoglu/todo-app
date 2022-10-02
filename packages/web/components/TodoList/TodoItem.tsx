@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { ArrowTopRightOnSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
-import { Todo } from '../../services';
+import { Todo, TodoApi } from '../../services';
 import { HomeContext } from '../../contexts';
+import { toast } from 'react-toastify';
 
 export interface TodoItemProps {
   todo: Todo;
@@ -11,6 +12,7 @@ export interface TodoItemProps {
 function TodoItem({ todo }: TodoItemProps): JSX.Element {
   const ctx = useContext(HomeContext);
   const router = useRouter();
+  const todoApi = useRef(new TodoApi());
 
   return (
     <>
@@ -18,9 +20,14 @@ function TodoItem({ todo }: TodoItemProps): JSX.Element {
         <input
           type="checkbox"
           className="accent-amber-300"
-          defaultChecked={todo.completed}
-          onChange={(e) => {
-            console.log(e.target.checked, todo.id);
+          defaultChecked={todo.isCompleted}
+          onChange={async (e) => {
+            const res = await todoApi.current.updateTodo(todo.id, { isCompleted: e.target.checked });
+            const msg = res ? 'Updated' : 'Error happened';
+            toast(msg, {
+              autoClose: 1000,
+              type: res ? 'success' : 'error',
+            });
           }}
         />
         <div className="ml-4">{todo.text}</div>
