@@ -14,7 +14,7 @@ function Profile({ data }: ProfileProps): JSX.Element {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-16 w-1/3"
+      className="mx-1 mt-16 w-10/12 lg:w-1/3"
     >
       <TextField
         label="Email"
