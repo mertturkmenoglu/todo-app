@@ -27,6 +27,7 @@ function DeleteTodoPopup(): JSX.Element {
           </button>
           <button
             className="w-full rounded border border-neutral-500 py-2 text-neutral-800 hover:bg-neutral-500 hover:text-neutral-50"
+            data-testid="cancel-btn"
             onClick={() => ctx.setIsDeleteTodoOpen(false)}
           >
             Cancel
