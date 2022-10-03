@@ -110,6 +110,80 @@ yarn dev
 * **TailwindCSS**: Utility-first CSS framework.
 * **TypeScript**: Typesafe language
 
+# Technical Choices
+
+* **NestJS**:
+  * Robust and works out-of-the-box.
+  * Good DI system.
+  * Can write REST, GraphQL, Microservices with a lot of choices.
+* **Express vs Fastify**:
+  * NestJS can work with either of them.
+  * By default, it's Express. Used Express to implement the solution.
+  * Can change it to Fastify for a faster system.
+  * Some of the middleware dependencies should be effected like cookie-parser or helmet.
+  * They can be replaced with their Fastify versions easily.
+* **argon2 vs bcrypt**:
+  * Both of them are good cryptography solutions and used and battle tested.
+  * argon2 offers better parallelization options.
+  * Either of them can be used.
+* **Prisma vs TypeORM**:
+  * TypeORM is the default choice of the NestJS ecosystem.
+  * Prisma is a modern solution.
+  * Prisma offers end to end type-safety whereas TypeORM lacks this feature.
+  * Prisma can nicely work with different types of databases.
+  * Example: You can use it with Postgres and then "relatively" easily change it to use Mongo.
+* **PostgreSQL vs MongoDB**:
+  * I'm comfortable with both solutions but I chose Postgres.
+  * It doesn't make much of a different in this case because data don't have many relations.
+  * Mongo's aggregation framework could also handle the job.
+  * I chose Postgres because of personal liking.
+* **class-validator vs zod**:
+  * Zod is the newest solution.
+  * NestJS ecosystem nicely works with class-validator.
+  * NestJS depends on classes and their metadata. Uses reflection.
+  * zod depends on type inference and interfaces.
+  * Their validation API is similar in terms of capability.
+  * Went with the default option.
+* **Next.js**:
+  * Modern React framework.
+  * Works nicely with TypeScript.
+  * Has out-of-the-box solution for most of the things. Example:
+    * Code splitting
+    * SSR
+    * File based routing
+    * CSS Modules
+    * SCSS
+    * Image optimization
+    * Testing
+  * Battle tested and used by many.
+  * I chose this mostly because of file based routing and SSR.
+  * One of the biggest cons: Increased JS bundle size.
+* **HeadlessUI + HeroIcons + TailwindCSS**:
+  * I like TailwindCSS, and it was in the tech-stack. I chose it.
+  * HeadlessUI and HeroIcons are from the same people behind the Tailwind.
+  * They work nicely with Tailwind.
+* **Tanstack React Query vs useSWC**:
+  * They are server state management libraries.
+  * React Query is more mature and has more features.
+  * Makes it easier to handle loading and error states.
+  * Automatic stale state and data refetch.
+* **axios vs fetch API**:
+  * Went for Axios, because works nicely with TypeScript.
+  * Can add interceptors, will need them in the future for the refresh tokens, for example.
+* **React Hook Form**:
+  * Great solution for handling form states and validations.
+* **jest + React Testing Library**:
+  * Most up-to-date solution for unit/component testing for React applications.
+  * Testing library also has helpers for DOM testing.
+  * Next.js with SWC has great support for Jest. *Almost* automatic configuration.
+
+### Notes
+
+* I wrote a RESTful API.
+* I'm comfortable with RESTful and GraphQL, but I haven't written a GraphQL API with NestJS.
+* I Didn't want to risk it and went with the REST option.
+* I tried to add a couple of tests but because of the time limitation, there are limited number of test cases.
+
 # Future Steps
 
 * [ ] Add refresh tokens.
